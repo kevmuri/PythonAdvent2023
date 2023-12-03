@@ -24,6 +24,7 @@ def process_input():
             hand_array.append(cube_count_object)
         input_array.append(hand_array)
 
+    print(input_array)
     return input_array
 
 

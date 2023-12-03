@@ -29,6 +29,10 @@ def get_numbers_to_check_for(lines):
                 found_number = ""
         found_numbers_in_input.append(found_numbers_in_row)
 
+    for item in found_numbers_in_input:
+        if len(set(item)) != len(item):
+            print(item)
+
     return found_numbers_in_input
 
 
@@ -38,9 +42,10 @@ def main():
     found_numbers_in_input = get_numbers_to_check_for(lines)
     for number_row in range(len(found_numbers_in_input)):
         for number in range(len(found_numbers_in_input[number_row])):
+            # for number_occurrence in range()
+            parser = lines[number_row].find(found_numbers_in_input[number_row][number])
             for digit in found_numbers_in_input[number_row][number]:
-                parser = lines[number_row].find(digit)
-                found = False
+                symbol_found = False
                 border_chars = [
                     lines[number_row - 1][parser - 1],  # top left
                     lines[number_row - 1][parser],  # top
@@ -51,7 +56,6 @@ def main():
                     lines[number_row + 1][parser],  # bottom
                     lines[number_row + 1][parser + 1],  # bottom right
                 ]
-                print([found_numbers_in_input[number_row][number], digit, border_chars])
                 for border_char in border_chars:
                     if (
                         not border_char.isnumeric()
@@ -61,10 +65,11 @@ def main():
                         answer = answer + int(
                             found_numbers_in_input[number_row][number]
                         )
-                        found = True
+                        symbol_found = True
                         break
-                if found:
+                if symbol_found:
                     break
+                parser += 1
     print(answer)
 
 

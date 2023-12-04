@@ -2,7 +2,7 @@ import re
 
 
 def read_file():
-    input_file = open("day3-input-example.txt", "r")
+    input_file = open("day3-input.txt", "r")
     lines = input_file.readlines()
 
     # Add border of periods beginning with rows
@@ -91,7 +91,7 @@ def string_to_array(number_string):
 
 
 def main():
-    answer = added_numbers()
+    answer = 0
     lines = read_file()
     for line_idx, line in enumerate(lines):
         parsers = [m.start() for m in re.finditer(r"G", line)]
@@ -167,8 +167,6 @@ def main():
                 product = int(found_numbers[0]) * int(found_numbers[1])
                 print("product", product)
                 answer = answer + product
-            elif found_numbers:
-                answer = int(found_numbers[0]) + answer
     print(answer)
 
 

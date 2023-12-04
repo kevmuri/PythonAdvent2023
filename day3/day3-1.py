@@ -1,5 +1,8 @@
+import re
+
+
 def read_file():
-    input_file = open("day3-input.txt", "r")
+    input_file = open("day3-input-example.txt", "r")
     lines = input_file.readlines()
 
     # Add border of periods beginning with rows
@@ -9,8 +12,8 @@ def read_file():
     lines.append(border_row)
     lines.insert(0, border_row)
     # Add columns on sides
-    for line in lines:
-        line = "." + line + "."
+    for line in range(len(lines)):
+        lines[line] = "." + lines[line] + "."
 
     return lines
 
@@ -42,35 +45,41 @@ def main():
     found_numbers_in_input = get_numbers_to_check_for(lines)
     for number_row in range(len(found_numbers_in_input)):
         for number in range(len(found_numbers_in_input[number_row])):
-            # for number_occurrence in range()
-            parser = lines[number_row].find(found_numbers_in_input[number_row][number])
-            for digit in found_numbers_in_input[number_row][number]:
-                symbol_found = False
-                border_chars = [
-                    lines[number_row - 1][parser - 1],  # top left
-                    lines[number_row - 1][parser],  # top
-                    lines[number_row - 1][parser + 1],  # top right
-                    lines[number_row][parser - 1],  # left
-                    lines[number_row][parser + 1],  # right
-                    lines[number_row + 1][parser - 1],  # bottom left
-                    lines[number_row + 1][parser],  # bottom
-                    lines[number_row + 1][parser + 1],  # bottom right
-                ]
-                for border_char in border_chars:
-                    if (
-                        not border_char.isnumeric()
-                        and border_char != "."
-                        and border_char != "\n"
-                    ):
-                        answer = answer + int(
-                            found_numbers_in_input[number_row][number]
-                        )
-                        symbol_found = True
+            parsers = [
+                m.start()
+                for m in re.finditer(
+                    rf"\D{found_numbers_in_input[number_row][number]}\D",
+                    lines[number_row],
+                )
+            ]
+            for parser in parsers:
+                for digit in found_numbers_in_input[number_row][number]:
+                    symbol_found = False
+                    border_chars = [
+                        lines[number_row - 1][parser - 1],  # top left
+                        lines[number_row - 1][parser],  # top
+                        lines[number_row - 1][parser + 1],  # top right
+                        lines[number_row][parser - 1],  # left
+                        lines[number_row][parser + 1],  # right
+                        lines[number_row + 1][parser - 1],  # bottom left
+                        lines[number_row + 1][parser],  # bottom
+                        lines[number_row + 1][parser + 1],  # bottom right
+                    ]
+                    for border_char in border_chars:
+                        if (
+                            not border_char.isnumeric()
+                            and border_char != "."
+                            and border_char != "\n"
+                        ):
+                            answer = answer + int(
+                                found_numbers_in_input[number_row][number]
+                            )
+                            symbol_found = True
+                            break
+                    if symbol_found:
                         break
-                if symbol_found:
-                    break
-                parser += 1
-    print(answer)
+                    parser += 1
+        print(answer)
 
 
 main()
